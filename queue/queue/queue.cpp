@@ -1,0 +1,120 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+	string data;
+	Node* next;
+
+	Node(string Elements) {
+		data = Elements;
+	}
+};
+
+struct Queue
+{
+	Node* start;
+
+	Node* end;
+
+
+	Queue() {
+		start = NULL;
+		end = NULL;
+	}
+	~Queue() {
+		Node* n = start, * current = NULL;
+
+		while (n != NULL) {
+			current = n;
+			n = n->next;
+			delete(current);
+		}
+		start = NULL;
+		end = NULL;
+	}
+
+	friend ostream& operator << (ostream& out, const Queue& q);
+
+
+	bool isEmpty() {
+		return(start == NULL);
+	}
+
+	void add(string data) {
+		Node* newNode = new Node(data);
+
+		if (end == NULL) {
+			start = newNode;
+			end = newNode;
+			newNode = nullptr;
+			delete newNode;
+			return;
+		}
+		end->next = newNode;
+		end = newNode;
+		newNode = nullptr;
+		delete newNode;
+	}
+	void remove() {
+		if (start == NULL) {
+			return;
+		}
+		Node* temp = start;
+		start = start->next;
+		
+
+		if (start == NULL) {
+			end = NULL;
+		}
+		delete(temp);
+	}
+	string peek() {
+		if (start == NULL) {
+			return NULL;
+		}
+		return start->data;
+	}
+
+};
+
+ostream& operator << (ostream& out, const Queue& s) {
+	Node* current = s.start;
+
+	while (current != NULL) {
+		cout << current->data << " ";
+		current = current->next;
+	}
+	cout << endl;
+
+	return out;
+}
+
+int main() {
+	Queue queue;
+
+	queue.add("The Matrix");
+	queue.add("Is");
+	queue.add("The");
+	queue.add("Best Movie Ever");
+
+
+	cout << "Queue: " << queue.peek() << endl;
+
+	queue.remove();
+
+
+
+
+	cout << "Queue: " << queue.peek() << endl;
+
+	cout << "This Queue is Empty?: ";
+	if (queue.isEmpty() == 1) {
+		cout << "True" << endl;
+
+	}
+	else {
+		cout << "False" << endl;
+	}
+	cout << "Show the queue: ";
+	cout << queue;
+}
